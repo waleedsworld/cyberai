@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#040404"/>
+      <stop offset="55%" stop-color="#0c0608"/>
+      <stop offset="100%" stop-color="#040404"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="72%" cy="24%" r="48%">
+      <stop offset="0%" stop-color="#ef233c" stop-opacity="0.38"/>
+      <stop offset="50%" stop-color="#ef233c" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.06">
+    <path d="M0 120H1200M0 315H1200M0 510H1200"/>
+    <path d="M180 0V630M600 0V630M1020 0V630"/>
+  </g>
+
+  <g transform="translate(88 134) scale(0.72)">
+    <path
+      d="M96 40C55 40 22 73 22 114C22 155 55 188 96 188C121 188 144 176 157 156L128 145C120 155 109 161 96 161C70 161 49 140 49 114C49 88 70 67 96 67C109 67 121 73 128 83L157 72C145 52 121 40 96 40Z"
+      fill="#f5f5f5"
+    />
+    <path
+      d="M230 40C205 40 182 52 169 72L198 83C206 73 217 67 230 67C256 67 277 88 277 114C277 140 256 161 230 161C217 161 206 155 198 145L169 156C182 176 205 188 230 188C271 188 304 155 304 114C304 73 271 40 230 40Z"
+      fill="#e30613"
+    />
+    <path d="M121 99L177 86L153 110L177 114L122 123L146 106L121 99Z" fill="#ffffff" />
+    <path d="M205 130L149 143L173 119L149 115L204 106L180 123L205 130Z" fill="#bf0310" />
+  </g>
+
+  <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">
+    <text x="94" y="364" fill="#FFFFFF" font-size="68" font-weight="650" letter-spacing="0.5">
+      PointBlank
+    </text>
+    <text x="94" y="420" fill="#cfcfd6" font-size="26" font-weight="400">
+      AI security, compliance, and incident response with expert verification
+    </text>
+    <text x="94" y="470" fill="#ff8a96" font-size="15" font-weight="600" letter-spacing="4">
+      POINTBLANK.SECURITY
+    </text>
+  </g>
+</svg>

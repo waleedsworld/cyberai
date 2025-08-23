@@ -1,0 +1,674 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 27% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 220 27% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 220 27% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 354 75% 47%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 354 100% 68%;
+    --secondary-foreground: 220 27% 4%;
+
+    --muted: 220 27% 12%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 354 100% 68%;
+    --accent-foreground: 220 27% 4%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 27% 12%;
+    --input: 220 27% 12%;
+    --ring: 271 76% 53%;
+
+    --cyber-navy: 220 27% 4%;
+    --cyber-purple: 354 75% 47%;
+    --cyber-teal: 354 100% 68%;
+    --cyber-dark: 220 27% 2%;
+    --cyber-light: 210 40% 98%;
+    
+    --gradient-cyber: linear-gradient(135deg, hsl(var(--cyber-navy)), hsl(var(--cyber-purple)));
+    --gradient-glow: linear-gradient(135deg, hsl(var(--cyber-purple) / 0.3), hsl(var(--cyber-teal) / 0.22));
+    --shadow-cyber: 0 20px 40px -10px hsl(var(--cyber-purple) / 0.42);
+    --shadow-glow: 0 0 60px hsl(var(--cyber-teal) / 0.24);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-serif {
+    font-family: 'Newsreader', serif;
+  }
+  
+  .font-manrope {
+    font-family: 'Manrope', sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Spotlight Card Effect */
+  .spotlight-card {
+    position: relative;
+    --mouse-x: 0px;
+    --mouse-y: 0px;
+  }
+
+  .spotlight-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      800px circle at var(--mouse-x) var(--mouse-y),
+      rgba(245, 43, 67, 0.42),
+      transparent 40%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .spotlight-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(225deg, rgba(245,43,67,0.16), rgba(255,255,255,0.02));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Beam Animation */
+  @keyframes beam-drop {
+    0% { top: -100px; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .beam {
+    position: absolute;
+    width: 1px;
+    height: 150px;
+    background: linear-gradient(to bottom, transparent, rgba(245,43,67,0.72), transparent);
+    animation: beam-drop 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .beam-delay-1 { animation-delay: 2s; }
+  .beam-delay-2 { animation-delay: 4s; }
+
+  /* Scroll Animation */
+  @keyframes animationIn {
+    0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+  }
+
+  .animate-on-scroll {
+    animation: animationIn 0.8s ease-out both;
+    animation-play-state: paused;
+  }
+
+  .animate-on-scroll.animate {
+    animation-play-state: running;
+  }
+
+  /* Ticker Scroll */
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+  /* === Onyx-inspired Orb Animations === */
+  @keyframes orb-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes orb-rotate-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+  @keyframes orb-pulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.04); }
+  }
+  @keyframes orb-glow {
+    0%, 100% { filter: blur(60px); opacity: 0.45; }
+    50% { filter: blur(80px); opacity: 0.75; }
+  }
+  @keyframes orb-shimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes orb-particle {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-220px) scale(0.6); opacity: 0; }
+  }
+  @keyframes scan-line {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(100%); opacity: 0; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes border-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Orb core class */
+  .orb-rotate-slow { animation: orb-rotate 24s linear infinite; }
+  .orb-rotate-rev { animation: orb-rotate-reverse 32s linear infinite; }
+  .orb-pulse { animation: orb-pulse 5s ease-in-out infinite; }
+  .orb-glow { animation: orb-glow 6s ease-in-out infinite; }
+  .orb-shimmer {
+    background-size: 200% 200%;
+    animation: orb-shimmer 8s ease infinite;
+  }
+  .scan-line-anim { animation: scan-line 4s ease-in-out infinite; }
+  .fade-up { animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* Glass surface helper */
+  .glass-dark {
+    background: rgba(10, 10, 10, 0.55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+    background-clip: padding-box;
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(208,32,48,0.5), rgba(208,32,48,0.05) 40%, rgba(255,90,102,0.4));
+    border-radius: inherit;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* === Organic Sphere Animations === */
+  @keyframes blob-morph {
+    0%, 100% { border-radius: 62% 38% 46% 54% / 54% 38% 62% 46%; transform: translate(0,0) rotate(0deg); }
+    25% { border-radius: 38% 62% 54% 46% / 62% 54% 46% 38%; transform: translate(-2%, 2%) rotate(90deg); }
+    50% { border-radius: 54% 46% 38% 62% / 46% 62% 38% 54%; transform: translate(2%, -1%) rotate(180deg); }
+    75% { border-radius: 46% 54% 62% 38% / 38% 46% 54% 62%; transform: translate(-1%, -2%) rotate(270deg); }
+  }
+  @keyframes blob-morph-rev {
+    0%, 100% { border-radius: 48% 52% 58% 42% / 42% 58% 52% 48%; transform: rotate(0deg) scale(1); }
+    33% { border-radius: 58% 42% 48% 52% / 52% 48% 42% 58%; transform: rotate(-120deg) scale(1.04); }
+    66% { border-radius: 42% 58% 52% 48% / 58% 42% 48% 52%; transform: rotate(-240deg) scale(0.97); }
+  }
+  @keyframes aurora-drift {
+    0% { transform: translate3d(0,0,0) rotate(0deg); }
+    50% { transform: translate3d(3%, -4%, 0) rotate(180deg); }
+    100% { transform: translate3d(0,0,0) rotate(360deg); }
+  }
+  @keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes dust-rise {
+    0% { transform: translate(0, 100px) scale(0); opacity: 0; }
+    10% { opacity: 0.9; transform: translate(0, 60px) scale(1); }
+    90% { opacity: 0.7; }
+    100% { transform: translate(var(--drift, 30px), -260px) scale(0.3); opacity: 0; }
+  }
+  @keyframes light-sweep {
+    0% { transform: translateX(-120%) skewX(-12deg); opacity: 0; }
+    20% { opacity: 0.55; }
+    80% { opacity: 0.45; }
+    100% { transform: translateX(120%) skewX(-12deg); opacity: 0; }
+  }
+  @keyframes ring-expand {
+    0% { transform: scale(0.85); opacity: 0; }
+    25% { opacity: 0.5; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+  @keyframes slow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .sphere-blob { animation: blob-morph 18s ease-in-out infinite; }
+  .sphere-blob-rev { animation: blob-morph-rev 22s ease-in-out infinite; }
+  .aurora-drift { animation: aurora-drift 30s linear infinite; }
+  .float-y { animation: float-y 8s ease-in-out infinite; }
+  .light-sweep { animation: light-sweep 7s ease-in-out infinite; }
+  .ring-expand { animation: ring-expand 6s ease-out infinite; }
+  .slow-spin { animation: slow-spin 60s linear infinite; }
+}
+
+/* ----------------- SideWave hero integration ----------------- */
+/* These rules apply only when SideWave is mounted. */
+body.sidewave-active {
+  background-color: #000;
+}
+
+/* Brand CTA buttons overlaid above the SideWave Unity canvas.
+   Positioned high enough that the Scroll Down pill (bottom: 36px below)
+   never overlaps. The buttons share width and height so the pair reads as
+   one control. */
+.sidewave-cta-overlay {
+  position: fixed;
+  left: 50%;
+  bottom: 120px;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 14px;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease 200ms;
+}
+.sidewave-cta-overlay.is-ready { opacity: 1; pointer-events: auto; }
+.sidewave-cta-overlay > a {
+  min-width: 168px;
+  height: 48px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.sidewave-cta-primary {
+  background: #d02030;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 10px 32px -8px rgba(208, 32, 48, 0.65);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sidewave-cta-primary:hover {
+  background: #f52b43;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px -8px rgba(245, 43, 67, 0.75);
+}
+.sidewave-cta-secondary {
+  background: rgba(8, 8, 12, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.sidewave-cta-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Hero mode toggle (fixed top-right) */
+.hero-mode-toggle {
+  position: fixed;
+  top: 124px;
+  right: 16px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(8,8,12,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.hero-mode-toggle:hover {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(8,8,12,0.75);
+}
+.hero-mode-toggle .dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: #f52b43;
+  box-shadow: 0 0 12px rgba(245,43,67,0.6);
+}
+.hero-mode-toggle.is-light .dot { background: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+
+@media (max-width: 768px) {
+  .hero-mode-toggle { top: 84px; right: 12px; font-size: 10px; padding: 6px 10px; }
+  .sidewave-cta-overlay {
+    bottom: 96px;
+    gap: 10px;
+    width: calc(100% - 32px);
+    max-width: 420px;
+  }
+  .sidewave-cta-overlay > a {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 44px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+}
+
+/* Hide scrollbar on horizontal scrollers */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Infinite horizontal logo track for TrustedBrands. The track contains the
+   logo list duplicated once; translating by -50% completes one full cycle. */
+@keyframes trust-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.trust-marquee {
+  width: max-content;
+  animation: trust-scroll 38s linear infinite;
+  will-change: transform;
+}
+.trust-marquee:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .trust-marquee { animation: none; }
+}
+
+/* Force SideWave's loader-gated UI to be visible immediately
+   (don't wait for Unity's ShowUnityWebGL fade-in).
+   These override SideWave's defaults so the user always has a way out. */
+body.sidewave-active .showAfterLoading { display: block !important; }
+body.sidewave-active #spaceNavigation.scrollToDiscover {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 35 !important;
+  bottom: 36px !important;
+  cursor: pointer;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(8, 8, 12, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+body.sidewave-active #spaceNavigation.scrollToDiscover:hover {
+  background: rgba(208, 32, 48, 0.85);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+@media (max-width: 768px) {
+  body.sidewave-active #spaceNavigation.scrollToDiscover {
+    bottom: 24px !important;
+    padding: 8px 14px;
+    font-size: 10px;
+  }
+}
+body.sidewave-active #sidewaveLogo { position: fixed; top: 24px; left: 24px; height: 40px; z-index: 35; }
+body.sidewave-active .sidewave-cta-overlay { opacity: 1 !important; pointer-events: auto !important; }
+
+/* Once the user scrolls past the hero zone, fade out the floating chrome
+   so it doesn't ride along on top of the rest of the page. */
+body.sidewave-past-hero .sidewave-cta-overlay,
+body.sidewave-past-hero #spaceNavigation.scrollToDiscover,
+body.sidewave-past-hero #sidewaveLogo {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 220ms ease;
+}
+
+/* Idle scroll hint: the Scroll Down pill grows a soft glow and a small
+   bouncing chevron once the user has been sitting still between waypoints.
+   The class is added by SidewaveHero after HINT_IDLE_MS of no scroll and
+   stripped the moment the user moves again. */
+@keyframes sidewave-hint-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(208, 32, 48, 0.45);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(208, 32, 48, 0);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+}
+@keyframes sidewave-hint-bounce {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.7; }
+  50% { transform: translate(-50%, 4px); opacity: 1; }
+}
+body.sidewave-active.sidewave-hint-active
+  #spaceNavigation.scrollToDiscover {
+  animation: sidewave-hint-pulse 1.4s ease-in-out infinite;
+}
+body.sidewave-active.sidewave-hint-active
+  #spaceNavigation.scrollToDiscover::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -14px;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
+  transform: translate(-50%, 0) rotate(45deg);
+  animation: sidewave-hint-bounce 1.4s ease-in-out infinite;
+}
+/* The pill is position:fixed with bottom:36px — the chevron sits just
+   beneath it, so we need overflow visible. The pill already has it by
+   default but make sure no later rule clips. */
+body.sidewave-active #spaceNavigation.scrollToDiscover { overflow: visible; }
+
+/* Full-screen gate that masks the canvas while SideWave is initialising.
+   Sits above the canvas but below the header so the user can still see
+   their context. Covers the 4-5s window between binary download (when
+   SideWave hides its own loader) and Timeline init (when scrollPositions
+   becomes populated and snap-scroll actually works). */
+.sidewave-gate {
+  position: fixed;
+  inset: 0;
+  /* Above the canvas (z 0) and SideWave's chrome (z 30-35) but below
+     the site Header (z 50) and HeroModeToggle (z 60) — the user can
+     still see brand context and switch to the light hero. */
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #030303;
+  color: #fff;
+  pointer-events: auto;
+}
+.sidewave-gate-spinner {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 18px;
+}
+.sidewave-gate-label {
+  font-family: 'Fraktion Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+}
+.sidewave-gate-sub {
+  margin-top: 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.02em;
+  text-align: center;
+  max-width: 240px;
+  line-height: 1.45;
+}
+
+/* "Quick load" / "Use lite hero" CTA shown inside the gate. The base
+   style is a calm outline so it doesn't fight the spinner for attention;
+   the .is-urgent modifier kicks in after SLOW_LOAD_MS to escalate. */
+.sidewave-lite-cta {
+  margin-top: 20px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sidewave-lite-cta:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+.sidewave-lite-cta.is-urgent {
+  background: #d02030;
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 10px 28px -8px rgba(208, 32, 48, 0.55);
+}
+.sidewave-lite-cta.is-urgent:hover {
+  background: #f52b43;
+}
+
+/* Tiny copy below the Scroll Down button hinting at the natural exit. */
+.sidewave-scroll-hint {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 56px;
+  z-index: 34;
+  font-family: 'Fraktion Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease 400ms;
+  white-space: nowrap;
+}
+.sidewave-scroll-hint.is-ready { opacity: 1; }
+
+/* (Old body.sidewave-dismissed + .sidewave-restore styles removed.
+   The hero is no longer CSS-hidden on exit — the canvas is position:sticky
+   so it scrolls out of view naturally and back in when scrolled up. */
+
