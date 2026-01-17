@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <defs>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="redGloss" x1="206" y1="34" x2="255" y2="192" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff2233" />
+      <stop offset="0.55" stop-color="#f40616" />
+      <stop offset="1" stop-color="#b40009" />
+    </linearGradient>
+    <linearGradient id="whiteGloss" x1="73" y1="34" x2="135" y2="192" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.65" stop-color="#f3f3f3" />
+      <stop offset="1" stop-color="#dddddd" />
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M96 40C55 40 22 73 22 114C22 155 55 188 96 188C121 188 144 176 157 156L128 145C120 155 109 161 96 161C70 161 49 140 49 114C49 88 70 67 96 67C109 67 121 73 128 83L157 72C145 52 121 40 96 40Z"
+    fill="url(#whiteGloss)"
+  />
+  <path
+    d="M230 40C205 40 182 52 169 72L198 83C206 73 217 67 230 67C256 67 277 88 277 114C277 140 256 161 230 161C217 161 206 155 198 145L169 156C182 176 205 188 230 188C271 188 304 155 304 114C304 73 271 40 230 40Z"
+    fill="url(#redGloss)"
+  />
+  <path d="M121 99L177 86L153 110L177 114L122 123L146 106L121 99Z" fill="#f6f6f6" filter="url(#softGlow)" />
+  <path d="M205 130L149 143L173 119L149 115L204 106L180 123L205 130Z" fill="#d90514" filter="url(#softGlow)" />
+</svg>
