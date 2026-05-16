@@ -1,0 +1,515 @@
+#chatbotBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    margin-left: -28px;
+    width: 56px;
+    height: 56px;
+    line-height: 55px;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    font-size: 10px;
+    padding: 0;
+    color: transparent;
+    text-transform: uppercase;
+    transition: all 0.5s;
+    z-index: 15;
+    text-wrap: nowrap;
+
+    display: none;
+}
+#chatbotBtn:hover, #chatbotBtn.chatbotOpened {
+    margin-left: -87px;
+    width: 175px;
+    color: white;
+    padding-left: 7px;
+    padding-right: 56px;
+    text-align: center;
+}
+
+#chatbotTextOpened, #chatbotTextThinking, #chatbotBtn.chatbotOpened #chatbotTextWaiting {
+    display: none;
+}
+
+#chatbotBtn.chatbotOpened #chatbotTextOpened {
+    display: block;
+}
+
+#chatbotIcon {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    width: 50px;
+    height: 50px;
+
+    background-color: #0E0F0F;
+    border-radius: 5px;
+
+    overflow: hidden;
+}
+
+#chatbotIcon img {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 1s;
+}
+/*
+#chatbotBtn:hover #chatbotIcon img {
+    transform: rotate(180deg);
+}
+*/
+#chatbotPanel, #chatbotContactsPanel {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(450px, 96vw);
+    max-width: calc(100% - 10px);
+    height: 190px;
+    z-index: 50;
+
+    backdrop-filter: blur(10px);
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 10px;
+
+    padding: 10px;
+
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+
+    display: none;
+}
+#chatbotContactsPanel {
+    background-color: rgba(255,255,255,0.1);
+}
+
+#chatbotContactsPanel {
+    bottom: 190px;
+}
+
+#chatbotDisclaimer,  #chatbotContactsDisclaimer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Fraktion Sans';
+    letter-spacing: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: #cccccc;
+}
+
+#chatbotDisclaimer a,  #chatbotContactsDisclaimer a, #reachus-privacy a {
+    font-family: 'Fraktion Sans';
+    letter-spacing: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: #cccccc;
+    text-decoration: none;
+}
+
+#policies a {
+    color: white;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+#chatbotQuestion, #chatbotContactsQuestion {
+    background-color: rgba(0,0,0,0.3);
+    border-radius: 5px;
+    width: 100%;
+    height: 110px;
+    color: white;
+    font-family: 'Fraktion Sans';
+
+    border: none;
+    resize: none;
+}
+
+#chatbotQuestion:focus, #chatbotContactsQuestion:focus {
+    outline: none !important;
+    border: none;
+    box-shadow: 0 0 1px white;
+}
+
+#chatbotQuestionWrapper, #chatbotContactsQuestionWrapper {
+    position: relative;
+}
+
+#old-chatbotQuestionWrapper:after, #old-chatbotContactsQuestionWrapper:after {
+    content: "Press Enter";
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+    font-size: 9px;
+    line-height: 20px;
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    text-transform: uppercase;
+    color: #ccc;
+}
+
+#chatbotMessages {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 350px;
+    max-width: calc(100% - 10px);
+    bottom: 250px;
+
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Fraktion Sans';
+    letter-spacing: normal;
+    font-size: 12px;
+    display: none;
+
+    flex-direction: column;
+    color: white;
+    max-height: calc(100vh - 340px);
+    overflow-y: auto;
+
+    visibility: hidden;
+
+    z-index: 52;
+}
+#chatbotMessages[style*='display: block'] {
+    display: flex !important;
+}
+
+
+#chatbotMessages .chatMsg {
+    background: rgba(0, 0, 0, 0.3);
+    align-self: flex-start;
+    padding: 5px 7px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+#chatbotMessages .chatMsg.user {
+    margin-right: 50px;
+}
+
+#chatbotMessages .chatMsg.assistant {
+    align-self: flex-end;
+    margin-left: 50px;
+}
+
+#chatbotSingleMessage {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 350px;
+    max-width: calc(100% - 10px);
+    bottom: 300px;
+
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Fraktion Sans';
+    letter-spacing: normal;
+    font-size: 14px;
+    line-height: 16px;
+    display: none;
+
+    flex-direction: column;
+    color: white;
+    max-height: calc(100vh - 340px);
+    overflow-y: auto;
+
+    visibility: hidden;
+
+    z-index: 52;
+}
+#chatbotSingleMessage img {
+    border-radius: 10px;
+    margin: 0 auto;
+    display: block;
+}
+
+.chatMsg.error {
+    align-self: center;
+    background: rgba(255, 0, 0, 0.3);
+}
+
+#chatbotSend, #chatbotContactsSend {
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+    font-size: 9px;
+    line-height: 20px;
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    text-transform: uppercase;
+    color: #ccc;
+    cursor: pointer;
+}
+#chatbotSend span, #chatbotContactsSend span{
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    font-family: "Fraktion Mono";
+    letter-spacing: normal;
+    padding: 0 5px;
+    margin: 0 5px;
+}
+#old-chatbotSend, #old-chatbotContactsSend{
+    background: #fff;
+    color: #000;
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    font-family: "Fraktion Mono";
+    letter-spacing: normal;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 5px;
+    margin: 0 5px;
+}
+
+#old-chatbotSend:hover, #old-chatbotContactsSend:hover {
+    background: #000;
+    color: #fff;
+}
+
+
+#chatbotContactsMessage {
+    position: fixed;
+    top: 80px;
+    bottom: 360px;
+    overflow-y: auto;
+    z-index: 1;
+    color: white;
+    font-family: 'Fraktion Mono';
+    text-transform: uppercase;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    display: none;
+}
+#chatbotContactsMessage[style*='display: block'] {
+    display: flex !important;
+}
+
+
+#chatbotContactsMessage > * {
+    margin: auto;
+}
+
+#chatbotContactsMessage p {
+    font-size: 12px !important;
+    line-height: 18px !important;
+}
+
+#chatbotContactsMessage li {
+    line-height: 16px !important;
+}
+
+
+.chatMsg a {
+    display: inline-block;
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #000;
+    background-color: #fff;
+    padding: 4px 8px;
+    margin: 4px;
+}
+#chatbotSingleMessage .chatMsg a:hover {
+    color: #fff;
+    background-color: #000;
+}
+
+#chatbotContactsMessage ul {
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    font-size: 12px;
+    line-height: 14px;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+
+#chatbotReachUsPanel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    max-width: calc(100% - 10px);
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Fraktion Mono';
+    letter-spacing: normal;
+    display: none;
+    color: white;
+    font-size: 12px;
+    box-shadow: 0 0 20px #000;
+}
+
+#reachus-last_name{
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+#chatbotReachUsPanel input[type=text], #chatbotReachUsPanel input[type=email], #chatbotReachUsPanel textarea {
+    min-height: 44px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    font-family: 'Fraktion Sans';
+    font-size: 12px;
+    padding: 12px 12px;
+    margin-bottom: 10px;
+    background: #111;
+    color: white;
+}
+#chatbotReachUsPanel textarea {
+    min-height: 88px;
+}
+
+#chatbotReachUsPanel input:focus {
+    outline: none !important;
+    border: none;
+    box-shadow: 0 0 1px white;
+}
+
+#reachus-submit {
+    font-size: 12px;
+    line-height: 20px;
+    color: white;
+    cursor: pointer;
+    padding: 15px 60px 15px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    text-transform: uppercase;
+    position: relative;
+    margin: 20px auto 0;
+    text-decoration: none;
+    border: none;
+    display: block;
+    width: 150px;
+}
+#reachus-submit::after {
+    content: url('../images/right-arrow-stroke.png');
+    padding: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #7DF9FF;
+}
+#reachus-submit:hover::after {
+    content: url('../images/right-arrow-stroke-selected-blue.png');
+    color: #7DF9FF;
+    background-color: #000;
+}
+
+#reachus-privacy {
+    display: block;
+    margin: 0;
+    line-height: 20px;
+    padding: 3px;
+    font-family: 'Fraktion Sans';
+}
+
+#reachus-form {
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+#reachus-success {
+    display: none;
+    text-transform: uppercase;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+}
+#reachus-success[style*='display: block'] {
+    display: flex !important;
+}
+
+
+
+#reachus-responseMessage {
+    display: block;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 20px 0;
+}
+
+#reachus-loading {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+    border-radius: 5px;
+}
+
+
+#chatbotBackToSelection {
+    display: none;
+    position: fixed;
+    bottom: 150px;
+    left: 50%;
+    z-index: 1;
+    transform: translateX(-50%);
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+    padding: 8px;
+    font-size: 10px;
+    cursor: pointer;
+}
+#chatbotBackToSelection:before{
+    content: url('../images/down_arrow.png');
+    width: 15px;
+    height: 18px;
+    position: absolute;
+    top: 7px;
+    transform: rotate(90deg);
+    left: -15px;
+}
+
+@media screen and (orientation: landscape) {
+    #chatbotContactsPanel {
+        bottom: max(190px, 30vh);
+    }
+    #chatbotContactsMessage {
+        bottom: max(360px, calc(30vh + 170px));
+    }
+}

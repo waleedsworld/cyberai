@@ -1,0 +1,306 @@
+@media (max-width: 1400px) {
+    #servicesBox-top, #servicesBox-bottom, #servicesBox-left {
+        background: linear-gradient(-90deg, black 0%, black 20%, transparent 60%);
+    }
+    #servicesBox-right {
+        background: linear-gradient(90deg, black 0%, black 20%, transparent 60%);
+    }
+    .servicesBox {
+        padding-left: 60vw;
+        padding-right: 10vw;
+    }
+    #servicesBox-right {
+        padding-left: 10vw;
+        padding-right: 60vw;
+    }
+}
+
+.mobile-only {
+    display: none;
+}
+
+@media screen and (orientation: portrait) {
+    #partnersLabel {
+        font-size: 10vw !important;
+    }
+
+    #portfolioNavigation {
+        left: 0;
+        bottom: 20px;
+        padding: 0 20px;
+    }
+    /*
+    #chatbotQuestionWrapper::after {
+        display: none;
+    }
+    #chatbotSend {
+        float: right;
+    }
+    */
+
+    .originClickToDiscover {
+        left: 50% !important;
+        transform: translateX(-50%);
+    }
+    #spaceNavigation {
+        /*top: 80px !important;*/
+        bottom: 80px;
+    }
+
+    .originSubText {
+        font-size: 3.2vw !important;
+        line-height: 4vw !important;
+        margin-top: 50px;
+    }
+
+    #menuBtn {
+        top: 25px;
+        width: 110px;
+        padding: 10px;
+    }
+    #menuBtn:after {
+        top: 17px;
+    }
+    #menuBtn.menuOpened:after {
+        right: 84px;
+    }
+
+    #menuPanel ul {
+        font-size: 8vh !important;
+        line-height: 8vh !important;
+        width: 100vw !important;
+        text-align: center !important;
+        margin: 0 20px 50px !important;
+    }
+    #menuPanel li a {
+        background: none !important;
+    }
+    #menuPanel a:hover {
+        color: white !important;
+        text-shadow: 0 0 0 white !important;
+    }
+    #menuPanel ul li .panelBg {
+        background-size: cover !important;
+    }
+    #menuPanel ul li:hover ul {
+        opacity: 0 !important;
+    }
+
+    #menuPanel ul li:hover .panelBg, #menuPanel ul li.active .panelBg {
+        opacity: 0 !important;
+    }
+
+    #menuPanel li #company_profile {
+        display: none;
+    }
+    .sendy-email {
+        width: 99% !important;
+    }
+
+    .scroll-overlay-list {
+        width: 100vw !important;
+    }
+
+    .scroll-overlay-list ul {
+        width: 80vw !important;
+    }
+
+    .scroll-overlay-list li .hoverToShow {
+        position: absolute;
+    }
+
+    .scroll-overlay-list li .title{
+        font-size: 12vw !important;
+        line-height: 10vw !important;
+    }
+
+    .scroll-overlay-text {
+        left: 8vw !important;
+        width: 84vw !important;
+        text-align: center !important;
+    }
+
+    .scroll-overlay-text h2 {
+        font-size: 12vw !important;
+        line-height: 12vw !important;
+        letter-spacing: -0.01em;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    .scroll-overlay-text p {
+        font-size: 4vw !important;
+        line-height: 4.1vw !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+
+    .about-text {
+        text-align: left !important;
+        /*padding-top: 100px;*/
+    }
+
+    #about_awards_list ul {
+        padding: 15vw 0;
+    }
+
+    .scroll-overlay-text .mobile-top {
+        padding-bottom: 50vh !important;
+        padding-top: 90px !important;
+    }
+    .scroll-overlay-text .mobile-bottom {
+        padding-top: 40vh !important;
+        /*padding-bottom: 90px !important;*/
+    }
+
+    .mobile-space-around {
+        justify-content: space-around !important;
+    }
+    .mobile-hidden {
+        display: none !important;
+    }
+    .mobile-only {
+        display: block !important;
+    }
+    .mobile-color-white {
+        color: white !important;
+    }
+
+    .lateralMenu {
+        display: none !important;
+    }
+
+
+
+    #originList li {
+        width: 100vw !important;
+        font-size: 20vw !important;
+        line-height: 9vw !important;
+    }
+    .originListClick {
+        font-size: 10vw;
+        line-height: 9vw;
+    }
+
+    .logo-slider {
+        width: 40vw;
+    }
+    .logo-track li {
+        padding: 60px 0;
+    }
+    .logo-track img {
+        height: 50px !important;
+        max-width: 100%;
+    }
+
+    .grid-dots {
+        padding: 0 5vw !important;
+    }
+
+    #social {
+        flex-basis: 50%;
+    }
+
+    #company_profile_mobile {
+        display: block;
+    }
+
+    #policies, #company {
+        flex: 1 1 0;
+    }
+
+    #company {
+        font-size: 8px;
+    }
+
+    #policies {
+        gap: 0;
+        margin: 0;
+        flex-direction: column;
+        align-items: normal;
+    }
+
+    #services-stats-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .grid-2 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .services-stats {
+        padding: 10px;
+        transform-origin: center bottom !important;
+    }
+
+    .services-stats p {
+        font-size: 3vw !important;
+    }
+
+
+    .servicesBox {
+        padding: 80px 20px !important;
+        background: black !important;
+        bottom: 0;
+        min-height: 100vh;
+        overflow-y: auto;
+        justify-content: flex-start;
+    }
+    .servicesBox h2 {
+        display: block !important;
+    }
+
+    #clientsPopup ul {
+        grid-template-columns: repeat(3, 1fr) !important;
+        padding: 90px 30px;
+    }
+
+    #clientsButton.clientsOpen {
+        right: -8px !important;
+    }
+
+    #chatbotBtn:hover {
+        margin-left: -20px !important;
+        width: 40px !important;
+        color: transparent !important;
+    }
+
+    #chatbotBtn.chatbotOpened {
+        margin-left: -75px !important;
+        width: 150px !important;
+        color: white !important;
+    }
+
+    #contactsAddress {
+        font-size: 12px !important;
+        line-height: 14px !important;
+    }
+}
+
+@media (max-height: 600px) {
+    .lateralMenu {
+        display: none !important;
+    }
+
+    .logo-track li {
+        padding: 30px 0;
+    }
+    .logo-track img {
+        height: 50px;
+        max-width: 100px;
+    }
+
+    #menuPanel ul  {
+        font-size: 30px !important;
+        line-height: 30px !important;
+        margin-bottom: 80px !important;
+    }
+}
+
+@media (max-height: 700px) {
+    #chatbotReachUsPanel {
+        top: auto;
+        bottom: 190px;
+        transform: translateX(-50%);
+    }
+}
