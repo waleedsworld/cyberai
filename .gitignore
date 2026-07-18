@@ -25,4 +25,7 @@ dist-ssr
 cookie.txt
 cookies.txt
 backend/
+
+# agent + local media artifacts
 .agent-tmp/
+*.mp4

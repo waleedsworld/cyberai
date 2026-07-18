@@ -53,9 +53,6 @@ const ComplianceCheck = () => {
     const finalUrl = 'https://' + cleanUrl;
     setUrl(finalUrl);
     
-    console.log('Original input:', url);
-    console.log('Cleaned URL:', cleanUrl);
-    console.log('Final URL:', finalUrl);
     
     setCurrentStep('location');
   };
@@ -73,9 +70,6 @@ const ComplianceCheck = () => {
         regionName = gccRegions.find(r => r.id === regionSelection)?.name || regionSelection;
       }
 
-      console.log('=== CREATING/CHECKING REGION ===');
-      console.log('Region Name:', regionName);
-      console.log('Region Selection:', regionSelection);
       
       // Create or get existing region
       const regionResponse = await fetch(`${API_BASE_URL}/regions/`, {
@@ -84,28 +78,24 @@ const ComplianceCheck = () => {
         body: JSON.stringify({ name: regionName })
       });
       
-      console.log('Region creation response status:', regionResponse.status);
       
       if (!regionResponse.ok) {
         throw new Error(`Failed to create region: ${regionResponse.status}`);
       }
       
       const regionData = await regionResponse.json();
-      console.log('Region data received:', regionData);
       
       // Store the actual region ID returned by the API
       setActualRegionId(regionData.region_id);
       
       // If region already exists, we might get laws in the response
       if (regionData.existing && regionData.laws) {
-        console.log('Using existing region with cached laws');
         setLawsData(regionData.laws);
         setCurrentStep('laws');
         return;
       }
       
       // Fetch laws for the region
-      console.log('Fetching laws for region:', regionData.region_id);
       const lawsResponse = await fetch(`${API_BASE_URL}/regions/${regionData.region_id}/laws?newlaws=false`);
       
       if (!lawsResponse.ok) {
@@ -113,12 +103,10 @@ const ComplianceCheck = () => {
       }
       
       const laws = await lawsResponse.json();
-      console.log('Laws received:', laws);
       setLawsData(laws);
       setCurrentStep('laws');
       
     } catch (error) {
-      console.error('Error in location selection:', error);
       toast({ 
         title: "Failed to load region", 
         description: error instanceof Error ? error.message : 'Unknown error occurred',
@@ -143,22 +131,12 @@ const ComplianceCheck = () => {
     setCurrentStep('scanning');
     
     const allUrls = [url, ...additionalUrls];
-    console.log('Starting scan for URLs:', allUrls);
-    console.log('Selected region:', selectedRegion);
     
     try {
       // Log the exact request being sent
       const requestUrl = `${API_BASE_URL}/region/${actualRegionId}/check_compliance`;
       const requestBody = { urls: allUrls };
       
-      console.log('=== COMPLIANCE CHECK REQUEST ===');
-      console.log('Selected Region:', selectedRegion);
-      console.log('Actual Region ID:', actualRegionId);
-      console.log('URL:', requestUrl);
-      console.log('Method: POST');
-      console.log('Headers:', { 'Content-Type': 'application/json' });
-      console.log('Body:', JSON.stringify(requestBody, null, 2));
-      console.log('================================');
       
       // Start compliance check using the actual region ID
       const response = await fetch(requestUrl, {
@@ -167,43 +145,32 @@ const ComplianceCheck = () => {
         body: JSON.stringify(requestBody)
       });
       
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.log('Error response body:', errorText);
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
       
       const jobData = await response.json();
-      console.log('Job data received:', jobData);
       
       if (!jobData.job_id) {
-        console.error('No job_id in response:', jobData);
         throw new Error('No job ID received from server');
       }
       
       setJobId(jobData.job_id);
-      console.log('Job ID set:', jobData.job_id);
       
       // Poll for results
       const pollForResults = async () => {
-        console.log('Polling for job status:', jobData.job_id);
         
         const statusResponse = await fetch(`${API_BASE_URL}/complaince_job/${jobData.job_id}`);
-        console.log('Status response:', statusResponse.status);
         
         if (!statusResponse.ok) {
-          console.error('Status check failed:', statusResponse.status);
           throw new Error(`Status check failed: ${statusResponse.status}`);
         }
         
         const status = await statusResponse.json();
-        console.log('Job status:', status);
         
         if (status.status === 'completed') {
-          console.log('Job completed, fetching report...');
           const reportResponse = await fetch(`${API_BASE_URL}/complaince_job/${jobData.job_id}/report`);
           
           if (!reportResponse.ok) {
@@ -211,20 +178,17 @@ const ComplianceCheck = () => {
           }
           
           const results = await reportResponse.json();
-          console.log('Results received:', results);
           setScanResults(results);
           setCurrentStep('results');
         } else if (status.status === 'failed') {
           throw new Error('Scan failed');
         } else {
-          console.log('Job still in progress, polling again in 3 seconds...');
           setTimeout(pollForResults, 3000);
         }
       };
       
       setTimeout(pollForResults, 3000);
     } catch (error) {
-      console.error('Scan error:', error);
       toast({ 
         title: "Scan failed", 
         description: error instanceof Error ? error.message : 'Unknown error occurred',
@@ -264,10 +228,10 @@ const ComplianceCheck = () => {
               <Badge variant="secondary" className="mb-4 text-lg px-6 py-2">
                 Free Compliance Check
               </Badge>
-              <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 Check Your Website's Compliance
               </h1>
-              <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
                 Ensure your website meets regional compliance requirements. Get detailed analysis in minutes.
               </p>
             </div>
@@ -328,7 +292,7 @@ const ComplianceCheck = () => {
         {/* Step 2: Location Selection */}
         {currentStep === 'location' && (
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">Select Your Region</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">Select Your Region</h2>
             <p className="text-muted-foreground mb-8">Choose the region whose compliance laws apply to your website</p>
             
             <div className="space-y-4">
@@ -407,7 +371,7 @@ const ComplianceCheck = () => {
         {currentStep === 'loading' && (
           <div className="max-w-2xl mx-auto text-center">
             <Loader2 className="h-16 w-16 animate-spin text-primary mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Loading Compliance Laws</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Loading Compliance Laws</h2>
             <p className="text-muted-foreground">Fetching the latest regulatory requirements...</p>
           </div>
         )}
@@ -416,7 +380,7 @@ const ComplianceCheck = () => {
         {currentStep === 'laws' && lawsData && (
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold mb-4">Compliance Requirements</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">Compliance Requirements</h2>
               <p className="text-muted-foreground">Here are the key laws your website will be checked against</p>
             </div>
 
@@ -455,26 +419,9 @@ const ComplianceCheck = () => {
         {currentStep === 'confirm' && (
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold mb-4">Confirm Your URLs</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">Confirm Your URLs</h2>
               <p className="text-muted-foreground">Review and add additional URLs to scan</p>
             </div>
-
-            {/* Debug Panel */}
-            <Card className="mb-6 bg-yellow-50 border-yellow-200">
-              <CardHeader>
-                <CardTitle className="text-sm text-yellow-800">🔍 Debug Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm text-yellow-900">
-                <div><strong>Selected Region:</strong> {selectedRegion}</div>
-                <div><strong>Actual Region ID:</strong> {actualRegionId}</div>
-                <div><strong>Region Name:</strong> {selectedRegion === 'custom' ? customLocation : gccRegions.find(r => r.id === selectedRegion)?.name}</div>
-                <div><strong>API Endpoint:</strong> {API_BASE_URL}/region/{actualRegionId}/check_compliance</div>
-                <div><strong>Request Body:</strong></div>
-                <pre className="bg-yellow-100 p-2 rounded text-xs overflow-x-auto">
-                  {JSON.stringify({ urls: [url, ...additionalUrls] }, null, 2)}
-                </pre>
-              </CardContent>
-            </Card>
 
             <Card className="mb-6">
               <CardHeader>
@@ -578,7 +525,7 @@ const ComplianceCheck = () => {
         {currentStep === 'scanning' && (
           <div className="max-w-2xl mx-auto text-center">
             <Loader2 className="h-16 w-16 animate-spin text-primary mx-auto mb-6" />
-            <h2 className="text-3xl font-bold mb-4">Scanning Your Website</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Scanning Your Website</h2>
             <p className="text-muted-foreground mb-4">
               Analyzing {[url, ...additionalUrls].length} URL(s) for compliance violations...
             </p>
@@ -590,7 +537,7 @@ const ComplianceCheck = () => {
         {currentStep === 'results' && scanResults && (
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold mb-4">Compliance Results</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">Compliance Results</h2>
               <p className="text-muted-foreground">Detailed analysis of your website's compliance status</p>
             </div>
 
@@ -623,7 +570,7 @@ const ComplianceCheck = () => {
                               )}
                             </div>
                             <Badge variant={finding.status === 'pass' ? 'default' : 'destructive'}>
-                              {finding.status.toUpperCase()}
+                              {String(finding.status ?? 'unknown').toUpperCase()}
                             </Badge>
                           </div>
                         </div>
