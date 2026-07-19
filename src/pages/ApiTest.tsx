@@ -9,20 +9,25 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/components/ui/use-toast"
+import { JsonViewer } from "@/components/ui/json-viewer"
+import { EmptyState } from "@/components/ui/empty-state"
 import {
-  Globe, 
-  Play, 
-  Copy, 
-  Settings, 
-  FileText, 
-  CheckCircle, 
+  Globe,
+  Play,
+  Copy,
+  Settings,
+  FileText,
+  CheckCircle,
   AlertCircle,
   Clock,
   Database,
   Search,
   Trash2,
   Plus,
-  Info
+  Info,
+  Terminal,
+  Check,
+  Timer
 } from "lucide-react"
 import { API_BASE_URL } from "@/lib/api-base";
 import Header from "@/components/Header";
@@ -34,13 +39,15 @@ const ApiTest = () => {
   const [loading, setLoading] = useState(false)
   const [response, setResponse] = useState<any>(null)
   const [activeEndpoint, setActiveEndpoint] = useState("")
+  const [copied, setCopied] = useState(false)
 
   const BASE_URL = API_BASE_URL
 
   const makeRequest = async (method: string, endpoint: string, body?: any) => {
     setLoading(true)
     setActiveEndpoint(endpoint)
-    
+    const startedAt = performance.now()
+
     try {
       const config: RequestInit = {
         method,
@@ -48,18 +55,21 @@ const ApiTest = () => {
           'Content-Type': 'application/json',
         },
       }
-      
+
       if (body) {
         config.body = JSON.stringify(body)
       }
 
       const response = await fetch(`${BASE_URL}${endpoint}`, config)
       const data = await response.json()
-      
+
       setResponse({
         status: response.status,
         statusText: response.statusText,
-        data
+        data,
+        method,
+        endpoint,
+        duration: Math.round(performance.now() - startedAt),
       })
 
       toast({
@@ -71,9 +81,12 @@ const ApiTest = () => {
       setResponse({
         status: 0,
         statusText: "Network Error",
-        data: { error: error instanceof Error ? error.message : "Unknown error" }
+        data: { error: error instanceof Error ? error.message : "Unknown error" },
+        method,
+        endpoint,
+        duration: Math.round(performance.now() - startedAt),
       })
-      
+
       toast({
         title: "Network Error",
         description: "Failed to connect to API",
@@ -86,6 +99,8 @@ const ApiTest = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 1600)
     toast({
       title: "Copied!",
       description: "Copied to clipboard",
@@ -518,33 +533,65 @@ const ApiTest = () => {
       return "text-muted-foreground"
     }
 
+    const ok = response.status >= 200 && response.status < 300
+
     return (
-      <Card className="mt-6">
-        <CardHeader>
+      <Card className="mt-6 overflow-hidden border-white/10 transition-shadow duration-300 hover:shadow-[0_0_50px_-12px_rgba(208,32,48,0.35)]">
+        {/* status accent rail */}
+        <div
+          className={`h-1 w-full ${
+            ok
+              ? "bg-gradient-to-r from-emerald-500/70 via-emerald-400/40 to-transparent"
+              : "bg-gradient-to-r from-[#d02030] via-[#f52b43]/50 to-transparent"
+          }`}
+        />
+        <CardHeader className="pb-3">
           <CardTitle className="flex items-center justify-between">
-            <span>Response</span>
+            <span className="flex items-center gap-2 text-base">
+              <Terminal className="h-4 w-4 text-[#ff8a96]" />
+              Response
+            </span>
             <div className="flex items-center gap-2">
-              <Badge variant={response.status >= 200 && response.status < 300 ? "default" : "destructive"}>
+              <Badge variant={ok ? "default" : "destructive"} className="tabular-nums">
                 {response.status} {response.statusText}
               </Badge>
               <Button
                 variant="outline"
                 size="sm"
+                className="transition-colors"
                 onClick={() => copyToClipboard(JSON.stringify(response.data, null, 2))}
               >
-                <Copy className="w-4 h-4" />
+                {copied ? (
+                  <Check className="h-4 w-4 text-emerald-400" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
               </Button>
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className={`text-sm mb-2 ${getStatusColor(response.status)}`}>
-            {activeEndpoint && `${activeEndpoint} - `}Status: {response.status}
+          {/* request meta strip */}
+          <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2 font-mono text-xs">
+            {response.method && (
+              <span className="font-semibold text-[#ff8a96]">{response.method}</span>
+            )}
+            <span className="truncate text-white/60">
+              {response.endpoint || activeEndpoint}
+            </span>
+            <span className={`ml-auto flex items-center gap-1.5 ${getStatusColor(response.status)}`}>
+              {ok ? <CheckCircle className="h-3.5 w-3.5" /> : <AlertCircle className="h-3.5 w-3.5" />}
+              {response.status}
+            </span>
+            {typeof response.duration === "number" && (
+              <span className="flex items-center gap-1 text-white/40">
+                <Timer className="h-3.5 w-3.5" />
+                {response.duration}ms
+              </span>
+            )}
           </div>
-          <ScrollArea className="h-96 w-full rounded-md border p-4">
-            <pre className="text-sm">
-              {JSON.stringify(response.data, null, 2)}
-            </pre>
+          <ScrollArea className="h-96 w-full rounded-md border border-white/10 bg-[#08080b] p-4">
+            <JsonViewer data={response.data} />
           </ScrollArea>
         </CardContent>
       </Card>
@@ -552,7 +599,7 @@ const ApiTest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       <Seo
         title="Compliance API Test | PointBlank"
         description="Interactive PointBlank API test interface for regions, sites, and compliance endpoints."
@@ -581,7 +628,7 @@ const ApiTest = () => {
               <Globe className="w-5 h-5 text-cyber-teal" />
               <span className="font-mono text-sm text-muted-foreground">Base URL:</span>
             </div>
-            <code className="text-cyber-teal font-mono">{BASE_URL}</code>
+            <code className="block break-all text-cyber-teal font-mono">{BASE_URL}</code>
           </div>
         </div>
 
@@ -622,17 +669,43 @@ const ApiTest = () => {
 
           <div className="lg:sticky lg:top-24 lg:h-fit">
             {loading && (
-              <Card className="mb-6">
+              <Card className="mb-6 overflow-hidden border-white/10">
+                <div className="h-1 w-full overflow-hidden bg-white/5">
+                  <div className="h-full w-1/3 animate-[apitest-progress_1.1s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-[#f52b43] to-transparent" />
+                </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyber-teal"></div>
-                    <span className="text-muted-foreground">Making request...</span>
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#f52b43] opacity-75" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#d02030]" />
+                    </span>
+                    <span className="font-mono text-sm text-white/70">
+                      {activeEndpoint || "Sending request…"}
+                    </span>
+                  </div>
+                  {/* skeleton lines */}
+                  <div className="mt-5 space-y-2.5">
+                    {[92, 74, 84, 58].map((w, i) => (
+                      <div
+                        key={i}
+                        className="h-3 rounded bg-gradient-to-r from-white/[0.08] via-white/[0.14] to-white/[0.08] bg-[length:200%_100%] animate-[apitest-shimmer_1.4s_ease-in-out_infinite]"
+                        style={{ width: `${w}%`, animationDelay: `${i * 120}ms` }}
+                      />
+                    ))}
                   </div>
                 </CardContent>
               </Card>
             )}
-            
-            <ResponseDisplay />
+
+            {!loading && !response && (
+              <EmptyState
+                icon={Terminal}
+                title="No response yet"
+                description="Pick an endpoint on the left and run a request. The live response and status will render here."
+              />
+            )}
+
+            {!loading && <ResponseDisplay />}
           </div>
         </div>
       </div>

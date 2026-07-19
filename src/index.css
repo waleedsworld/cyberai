@@ -672,3 +672,116 @@ body.sidewave-active #spaceNavigation.scrollToDiscover { overflow: visible; }
    The hero is no longer CSS-hidden on exit — the canvas is position:sticky
    so it scrolls out of view naturally and back in when scrolled up. */
 
+/* ----------------- Compliance workflow polish ----------------- */
+/* Radar sweep used by ScanProgress. A slow conic rotation reads as an
+   active security scan rather than a generic spinner. */
+@keyframes scan-radar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.scan-radar { animation: scan-radar 2.6s linear infinite; transform-origin: center; }
+
+/* Indeterminate progress bar: a highlight sweeps left→right forever. */
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(420%); }
+}
+.progress-indeterminate {
+  animation: progress-indeterminate 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan-radar, .progress-indeterminate { animation: none; }
+}
+
+/* Drifting starfield used by the redesigned 404 page. */
+@keyframes nf-drift {
+  from { transform: translate3d(0,0,0); }
+  50% { transform: translate3d(-14px, 10px, 0); }
+  to { transform: translate3d(0,0,0); }
+}
+.nf-drift { animation: nf-drift 18s ease-in-out infinite; }
+@keyframes nf-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  94% { opacity: 0.35; }
+  96% { opacity: 1; }
+}
+.nf-flicker { animation: nf-flicker 4.5s linear infinite; }
+
+/* ----------------- Tool-page interaction polish ----------------- */
+/* Indeterminate progress bar + skeleton shimmer used by the API test and
+   compliance tool panels while a request is in flight. Keyframes live here
+   so components can reference them via arbitrary-value animation utilities. */
+@keyframes apitest-progress {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(420%); }
+}
+@keyframes apitest-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[apitest-progress_1\.1s_ease-in-out_infinite\],
+  .animate-\[apitest-shimmer_1\.4s_ease-in-out_infinite\] {
+    animation: none;
+  }
+}
+/* ----------------- Accessibility: keyboard focus ----------------- */
+/* A visible, high-contrast focus ring for keyboard users only (mouse
+   clicks won't trigger :focus-visible), so interactive elements are
+   never left without a focus indicator. */
+:focus-visible {
+  outline: 2px solid #ff8a96;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ----------------- Accessibility: reduced motion ----------------- */
+/* Users who ask their OS to minimise motion get a near-static site:
+   animations and scroll-driven transitions collapse to a single frame,
+   smooth-scroll is disabled, and scroll-reveal content is shown at rest
+   instead of animating in. Individual components already opt in where
+   relevant; this is the global safety net. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* Scroll-reveal elements must never be left invisible when their
+     animation is neutralised — force them to their resting state. */
+  .animate-on-scroll {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .fade-up,
+  .float-y,
+  .sphere-blob,
+  .sphere-blob-rev,
+  .aurora-drift,
+  .light-sweep,
+  .ring-expand,
+  .slow-spin,
+  .orb-rotate-slow,
+  .orb-rotate-rev,
+  .orb-pulse,
+  .orb-glow,
+  .orb-shimmer,
+  .scan-line-anim,
+  .animate-scroll,
+  .beam {
+    animation: none !important;
+  }
+}
+

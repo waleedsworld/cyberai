@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import HeroSectionVariantB from "@/components/HeroSectionVariantB";
 import SidewaveHero from "@/components/SidewaveHero";
+import { useLandingVariant } from "@/hooks/use-variant";
 import HeroModeToggle, { type HeroMode } from "@/components/HeroModeToggle";
 import TrustedBrands from "@/components/TrustedBrands";
 import ProofStrip from "@/components/ProofStrip";
@@ -15,6 +17,7 @@ import UseCases from "@/components/UseCases";
 import PremiumCTA from "@/components/PremiumCTA";
 import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
+import SkipToContent from "@/components/SkipToContent";
 
 const STORAGE_KEY = "pointblank_hero_mode";
 
@@ -26,6 +29,7 @@ const readMode = (): HeroMode => {
 
 const Index = () => {
   const [heroMode, setHeroMode] = useState<HeroMode>(readMode);
+  const variant = useLandingVariant();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -68,11 +72,26 @@ const Index = () => {
         description="PointBlank delivers AI-assisted penetration testing, security operations, compliance reviews, and incident response with expert verification."
         path="/"
       />
+      <SkipToContent />
       <Header />
-      <HeroModeToggle mode={heroMode} onToggle={handleModeChange} />
+      {variant === "b" ? null : (
+        <HeroModeToggle mode={heroMode} onToggle={handleModeChange} />
+      )}
 
-      <main className="relative pt-[108px]">
-        {heroMode === "sidewave" ? <SidewaveHero /> : <HeroSection />}
+      <main id="main-content" className="relative pt-[108px]">
+        {/* The hero is a visual/WebGL experience with no real <h1>; provide a
+            screen-reader-only page heading so the document has a top-level
+            heading and correct outline for assistive tech. */}
+        <h1 className="sr-only">
+          PointBlank — AI Security, Compliance, and Incident Response
+        </h1>
+        {variant === "b" ? (
+          <HeroSectionVariantB />
+        ) : heroMode === "sidewave" ? (
+          <SidewaveHero />
+        ) : (
+          <HeroSection />
+        )}
         <TrustedBrands />
         <ProofStrip />
         <ArchitectureSection />
