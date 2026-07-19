@@ -47,6 +47,8 @@ const OutcomesPanel = () => {
               <img
                 src={o.image}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,3,3,0.1)_30%,rgba(3,3,3,0.85)_75%,rgba(3,3,3,0.95)_100%)]" />

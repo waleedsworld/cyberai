@@ -26,6 +26,8 @@ const ValidationSection = () => {
               src={card.image}
               alt=""
               aria-hidden="true"
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.025] dark:block"
             />
             <div className="absolute inset-0 dark:bg-[linear-gradient(180deg,rgba(0,0,0,0.05),rgba(0,0,0,0.18))] bg-[linear-gradient(180deg,rgba(245,43,67,0.08),rgba(208,32,48,0.12))]" />

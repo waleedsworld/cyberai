@@ -29,7 +29,7 @@ const ServicePage = () => {
 
   if (!service) {
     return (
-      <div className="min-h-screen bg-[#030303] text-white">
+      <div className="min-h-screen overflow-x-hidden bg-[#030303] text-white">
         <Seo
           title="Service Not Found | PointBlank"
           description="The requested PointBlank service page could not be found."
@@ -58,7 +58,7 @@ const ServicePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#030303] text-white">
       <Seo
         title={`${service.title} | PointBlank`}
         description={`${service.shortDescription} PointBlank combines AI-assisted workflows with expert verification.`}

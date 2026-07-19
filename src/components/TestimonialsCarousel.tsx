@@ -98,6 +98,8 @@ const TestimonialsCarousel = () => {
             <img
               src={t.image}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,3,3,0.15)_30%,rgba(3,3,3,0.85)_100%)]" />

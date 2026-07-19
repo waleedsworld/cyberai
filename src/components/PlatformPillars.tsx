@@ -80,6 +80,8 @@ const PlatformPillars = () => {
               key={active.id}
               src={active.visual.src}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
             />
           )}

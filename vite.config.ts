@@ -16,4 +16,27 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Split large third-party dependencies into their own long-lived chunks so
+    // they cache independently of app code and don't bloat the entry bundle.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "radix-vendor": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-dropdown-menu",
+            "@radix-ui/react-navigation-menu",
+            "@radix-ui/react-popover",
+            "@radix-ui/react-select",
+            "@radix-ui/react-tabs",
+            "@radix-ui/react-toast",
+            "@radix-ui/react-tooltip",
+          ],
+          "query-vendor": ["@tanstack/react-query"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 700,
+  },
 }));

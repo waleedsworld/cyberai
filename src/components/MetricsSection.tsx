@@ -20,6 +20,8 @@ const MetricsSection = () => {
           <img 
             src="/pointblank/protected-infrastructure.png"
             alt="Protected enterprise infrastructure"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-luminosity group-hover:scale-105 transition-transform duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#4a070d]/80 to-transparent mix-blend-multiply"></div>
