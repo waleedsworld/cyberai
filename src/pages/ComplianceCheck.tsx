@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowDown, Globe, Shield, CheckCircle, AlertTriangle, Loader2, Plus, X } from 'lucide-react';
+import { ArrowDown, Globe, Shield, CheckCircle, AlertTriangle, Loader2, Plus, X, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { API_BASE_URL } from '@/lib/api-base';
+import { normalizeUrl } from '@/lib/url';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
+import ComplianceReport from '@/components/ComplianceReport';
+import { entryFromReport, saveHistoryEntry } from '@/hooks/use-compliance-history';
+import ScanProgress from '@/components/ScanProgress';
+import ScanResultsSummary from '@/components/ScanResultsSummary';
 
 const gccRegions = [
   { id: 'saudi-arabia', name: 'Saudi Arabia' },
@@ -40,17 +46,8 @@ const ComplianceCheck = () => {
       return;
     }
     
-    // Clean the URL - remove any existing protocol
-    let cleanUrl = url.trim();
-    if (cleanUrl.startsWith('https://')) {
-      cleanUrl = cleanUrl.replace('https://', '');
-    }
-    if (cleanUrl.startsWith('http://')) {
-      cleanUrl = cleanUrl.replace('http://', '');
-    }
-    
-    // Ensure it starts with https://
-    const finalUrl = 'https://' + cleanUrl;
+    // Normalize to a canonical https:// URL (strips any existing protocol).
+    const finalUrl = normalizeUrl(url);
     setUrl(finalUrl);
     
     
@@ -180,6 +177,24 @@ const ComplianceCheck = () => {
           const results = await reportResponse.json();
           setScanResults(results);
           setCurrentStep('results');
+
+          // Persist this scan so it can be revisited/exported from the Report Center.
+          try {
+            const regionName =
+              selectedRegion === 'custom'
+                ? customLocation
+                : gccRegions.find((r) => r.id === selectedRegion)?.name || selectedRegion;
+            saveHistoryEntry(
+              entryFromReport(results, {
+                jobId: jobData.job_id,
+                regionName,
+                regionId: actualRegionId,
+                urls: allUrls,
+              })
+            );
+          } catch {
+            /* history persistence is best-effort */
+          }
         } else if (status.status === 'failed') {
           throw new Error('Scan failed');
         } else {
@@ -211,7 +226,7 @@ const ComplianceCheck = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-primary/5">
+    <div className="min-h-screen overflow-x-hidden bg-gradient-to-br from-background via-background/95 to-primary/5">
       <Seo
         title="Website Compliance Check | PointBlank"
         description="Run PointBlank's website compliance workflow across GCC jurisdictions, mapped laws, and evidence-backed cyber findings."
@@ -369,11 +384,16 @@ const ComplianceCheck = () => {
 
         {/* Step 3: Loading */}
         {currentStep === 'loading' && (
-          <div className="max-w-2xl mx-auto text-center">
-            <Loader2 className="h-16 w-16 animate-spin text-primary mx-auto mb-6" />
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Loading Compliance Laws</h2>
-            <p className="text-muted-foreground">Fetching the latest regulatory requirements...</p>
-          </div>
+          <ScanProgress
+            eyebrow="Step 3 / Mapping laws"
+            title="Loading Compliance Laws"
+            phases={[
+              'Resolving jurisdiction…',
+              'Fetching the latest regulatory requirements…',
+              'Summarizing applicable statutes…',
+              'Preparing your checklist…',
+            ]}
+          />
         )}
 
         {/* Step 4: Laws Preview */}
@@ -523,67 +543,40 @@ const ComplianceCheck = () => {
 
         {/* Step 6: Scanning */}
         {currentStep === 'scanning' && (
-          <div className="max-w-2xl mx-auto text-center">
-            <Loader2 className="h-16 w-16 animate-spin text-primary mx-auto mb-6" />
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Scanning Your Website</h2>
-            <p className="text-muted-foreground mb-4">
-              Analyzing {[url, ...additionalUrls].length} URL(s) for compliance violations...
-            </p>
-            <p className="text-sm text-muted-foreground">This may take a few minutes</p>
-          </div>
+          <ScanProgress
+            eyebrow="Step 6 / Scanning"
+            title="Scanning Your Website"
+            phases={[
+              'Crawling target pages…',
+              'Extracting policies and disclosures…',
+              'Cross-referencing regional laws…',
+              'Collecting evidence snippets…',
+              'Scoring compliance findings…',
+            ]}
+            urls={[url, ...additionalUrls]}
+          />
         )}
 
         {/* Step 7: Results */}
         {currentStep === 'results' && scanResults && (
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">Compliance Results</h2>
-              <p className="text-muted-foreground">Detailed analysis of your website's compliance status</p>
-            </div>
-
-            <div className="space-y-6">
-              {scanResults.pages?.map((page: any, index: number) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Globe className="h-5 w-5" />
-                      {page.url}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {page.findings?.map((finding: any, findingIndex: number) => (
-                        <div key={findingIndex} className="border rounded-lg p-4">
-                          <div className="flex items-start gap-3 mb-2">
-                            {finding.status === 'pass' ? (
-                              <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
-                            ) : (
-                              <AlertTriangle className="h-5 w-5 text-red-500 mt-0.5" />
-                            )}
-                            <div className="flex-1">
-                              <h4 className="font-semibold">{finding.law}</h4>
-                              <p className="text-sm text-muted-foreground mt-1">{finding.details}</p>
-                              {finding.evidence_snippet && (
-                                <div className="mt-2 p-2 bg-muted rounded text-xs">
-                                  <strong>Evidence:</strong> {finding.evidence_snippet}
-                                </div>
-                              )}
-                            </div>
-                            <Badge variant={finding.status === 'pass' ? 'default' : 'destructive'}>
-                              {String(finding.status ?? 'unknown').toUpperCase()}
-                            </Badge>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <div className="text-center mt-8">
-              <Button onClick={restart} size="lg">
-                Check Another Website
+          <div className="max-w-5xl mx-auto space-y-6">
+            <ScanResultsSummary pages={scanResults.pages} />
+            <ComplianceReport
+              results={scanResults}
+              region={
+                selectedRegion === 'custom'
+                  ? customLocation
+                  : gccRegions.find((r) => r.id === selectedRegion)?.name || selectedRegion
+              }
+              urls={[url, ...additionalUrls]}
+              onRestart={restart}
+            />
+            <div className="text-center">
+              <Button asChild variant="outline">
+                <Link to={jobId ? `/reports?job=${jobId}` : '/reports'}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Save &amp; open in Report Center
+                </Link>
               </Button>
             </div>
           </div>

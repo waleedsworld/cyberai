@@ -40,6 +40,11 @@ export const megaNavSections: MegaNavSection[] = [
             href: "/compliance-check",
           },
           {
+            title: "Compliance Report Center",
+            description: "Revisit, score, filter, and export any past compliance scan by job ID.",
+            href: "/reports",
+          },
+          {
             title: "Security Data Pipelines",
             description: "Prepare security telemetry for SIEM, AI review, and executive reporting.",
             href: "#case-studies",

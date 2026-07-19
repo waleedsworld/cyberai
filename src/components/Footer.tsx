@@ -27,7 +27,7 @@ const footerColumns = [
     links: [
       { text: "Blog", href: "#" },
       { text: "Case Studies", href: "#" },
-      { text: "Compliance Mapping", href: "#" },
+      { text: "Readiness Scorecard", href: "/readiness" },
       { text: "Threat Briefings", href: "#" },
     ],
   },
