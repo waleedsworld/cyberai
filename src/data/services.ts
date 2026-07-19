@@ -281,7 +281,7 @@ export const services: Service[] = [
       "Threat intelligence summaries",
     ],
     process: ["Monitor", "Correlate", "Triage", "Respond", "Report"],
-    relatedServices: ["security-operations-center", "compromise-assessment", "threat-hunting"],
+    relatedServices: ["security-operations-center", "compromise-assessment", "data-breach-response"],
   },
 
   // Governance & Compliance
@@ -307,7 +307,7 @@ export const services: Service[] = [
       "Policy and governance recommendations",
     ],
     process: ["Assess", "Model", "Plan", "Guide", "Report"],
-    relatedServices: ["discovery", "compliance-automation", "security-governance"],
+    relatedServices: ["discovery", "server-credentialed-check", "email-security"],
   },
   {
     id: "discovery",
@@ -355,7 +355,7 @@ export const services: Service[] = [
       "Security awareness training guidance",
     ],
     process: ["Discover", "Assess", "Simulate", "Validate", "Report"],
-    relatedServices: ["discovery", "data-leakage-prevention", "security-awareness"],
+    relatedServices: ["discovery", "data-leakage-prevention", "virtual-ciso"],
   },
 
   // Incident & Investigation
@@ -479,7 +479,7 @@ export const services: Service[] = [
       "Policy and training recommendations",
     ],
     process: ["Discover", "Map", "Assess", "Validate", "Report"],
-    relatedServices: ["email-security", "secure-cloud-hosting", "compliance-automation"],
+    relatedServices: ["email-security", "secure-cloud-hosting", "discovery"],
   },
   {
     id: "secure-cloud-hosting",
@@ -503,7 +503,7 @@ export const services: Service[] = [
       "Incident response and escalation procedures",
     ],
     process: ["Design", "Deploy", "Monitor", "Maintain", "Report"],
-    relatedServices: ["discovery", "data-leakage-prevention", "compliance-automation"],
+    relatedServices: ["discovery", "data-leakage-prevention", "server-credentialed-check"],
   },
 ];
 

@@ -29,3 +29,10 @@ backend/
 # agent + local media artifacts
 .agent-tmp/
 *.mp4
+
+# test + coverage artifacts
+coverage
+playwright-report
+test-results
+blob-report
+.playwright

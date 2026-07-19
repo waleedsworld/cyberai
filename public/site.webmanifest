@@ -1,0 +1,25 @@
+{
+  "name": "PointBlank — AI Security, Compliance & Incident Response",
+  "short_name": "PointBlank",
+  "description": "AI-assisted penetration testing, security operations, compliance reviews, and incident response with expert verification.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#040404",
+  "theme_color": "#040404",
+  "lang": "en",
+  "categories": ["security", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
